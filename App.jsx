@@ -1,51 +1,34 @@
-import React from 'react';
-// begin code
-class App extends React.Component {
-	constructor() {
-		super();
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { addTodo } from './actions/actions'
 
-		this.state = {
-			data:
-				[
-					{
-						component: 'First...',
-						id: 1
-					},
+import AddTodo from './components/AddTodo.jsx'
+import TodoList from './components/TodoList.jsx'
 
-					{
-						component: 'Second...',
-						id: 2
-					},
-					{
-						component: 'Third...',
-						id: 3
-					}
-				]
-		}
-
-	}
-
+class App extends Component {
 	render() {
+		const { dispatch, visibleTodos } = this.props;
+		// console.log(dispatch);
+		// console.log(visibleTodos);
+		// console.log(this.props);
 		return (
 			<div>
-				<div>
-					{this.state.data.map((dynamicComponent, i) => <Content
-						key = {i} componentData = {dynamicComponent}/>)}
-				</div>
+
+				<AddTodo
+					onAddClick = {text => dispatch(addTodo(text))}
+				/>
+
+				<TodoList todos = {visibleTodos}/>
+
 			</div>
-		);
+		)
 	}
 }
 
-class Content extends React.Component {
-	render() {
-		return (
-			<div>
-				<div>{this.props.componentData.component}</div>
-				<div>{this.props.componentData.id}</div>
-			</div>
-		);
+function select(state) {
+	return {
+		visibleTodos: state.todos
 	}
 }
 
-export default App;
+export default connect(select)(App)
